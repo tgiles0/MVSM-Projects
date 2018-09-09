@@ -51,48 +51,44 @@
 % submarine cannot be placed in area that is occupied.
 <- (submarine_ship1(R,C) | submarine_ship2(R,C) | submarine_ship3(R,C)) & (destroyer_ship1(R,C) | destroyer_ship2(R,C) | destroyer_ship3(R,C)).
 <- (submarine_ship1(R,C) | submarine_ship2(R,C) | submarine_ship3(R,C)) & (aircraft_ship1(R,C) | aircraft_ship2(R,C) | aircraft_ship3(R,C) | aircraft_ship4(R,C)).
-% TESTING FIRST 4
 <- (submarine_ship1(R,C) | submarine_ship2(R,C) | submarine_ship3(R,C)) & (battle_ship1(R,C) | battle_ship2(R,C) | battle_ship3(R,C) | battle_ship4(R,C) | battle_ship5(R,C)).
 
 % destroyer cannot be placed in area that is occupied.
 <- (destroyer_ship1(R,C) | destroyer_ship2(R,C) | destroyer_ship3(R,C)) & (aircraft_ship1(R,C) | aircraft_ship2(R,C) | aircraft_ship3(R,C) | aircraft_ship4(R,C)).
-% TESTING FIRST 4
 <- (destroyer_ship1(R,C) | destroyer_ship2(R,C) | destroyer_ship3(R,C)) & (battle_ship1(R,C) | battle_ship2(R,C) | battle_ship3(R,C) | battle_ship4(R,C) | battle_ship5(R,C)).
 
 % aircraft cannot be placed in area that is occupied.
-% TESTING FIRST 4
 <- (aircraft_ship1(R,C) | aircraft_ship2(R,C) | aircraft_ship3(R,C) | aircraft_ship4(R,C)) & (battle_ship1(R,C) | battle_ship2(R,C) | battle_ship3(R,C) | battle_ship4(R,C) | battle_ship5(R,C)).
 
 %initalization to false so that no areas are occupied at beginning
 {area_occupied(R,C)=false}.
 
 % accounting for patrol boat
-area_occupied(R,C) <- patrol_ship1(R,C).
-area_occupied(R,C) <- patrol_ship2(R,C).
+%area_occupied(R,C) <- patrol_ship1(R,C).
+%area_occupied(R,C) <- patrol_ship2(R,C).
 
 % accounting for submarine
-area_occupied(R,C) <- submarine_ship1(R,C).
-area_occupied(R,C) <- submarine_ship2(R,C).
-area_occupied(R,C) <- submarine_ship3(R,C).
+%area_occupied(R,C) <- submarine_ship1(R,C).
+%area_occupied(R,C) <- submarine_ship2(R,C).
+%area_occupied(R,C) <- submarine_ship3(R,C).
 
 % accounting for destroyer
-area_occupied(R,C) <- destroyer_ship1(R,C).
-area_occupied(R,C) <- destroyer_ship2(R,C).
-area_occupied(R,C) <- destroyer_ship3(R,C).
+%area_occupied(R,C) <- destroyer_ship1(R,C).
+%area_occupied(R,C) <- destroyer_ship2(R,C).
+%area_occupied(R,C) <- destroyer_ship3(R,C).
 
 % account for aircraft
-area_occupied(R,C) <- aircraft_ship1(R,C).
-area_occupied(R,C) <- aircraft_ship2(R,C).
-area_occupied(R,C) <- aircraft_ship3(R,C).
-area_occupied(R,C) <- aircraft_ship4(R,C).
+%area_occupied(R,C) <- aircraft_ship1(R,C).
+%area_occupied(R,C) <- aircraft_ship2(R,C).
+%area_occupied(R,C) <- aircraft_ship3(R,C).
+%area_occupied(R,C) <- aircraft_ship4(R,C).
 
 %account for battleship
-% TESTING FIRST 4
-area_occupied(R,C) <- battle_ship1(R,C).
-area_occupied(R,C) <- battle_ship2(R,C).
-area_occupied(R,C) <- battle_ship3(R,C).
-area_occupied(R,C) <- battle_ship4(R,C).
-area_occupied(R,C) <- battle_ship5(R,C).
+%area_occupied(R,C) <- battle_ship1(R,C).
+%area_occupied(R,C) <- battle_ship2(R,C).
+%area_occupied(R,C) <- battle_ship3(R,C).
+%area_occupied(R,C) <- battle_ship4(R,C).
+%area_occupied(R,C) <- battle_ship5(R,C).
 
 % -----  END OF AREA OCCUPIED -----
 
@@ -110,13 +106,13 @@ area_occupied(R,C) <- battle_ship5(R,C).
 (patrol_ship2(R+1,C) | patrol_ship2(R,C+1)) <- patrol_ship1(R,C).
 
 % next lines used to see if horizontal or vertical.
-{pat_vertical(Pa)=false}.
-{pat_horizontal(Pa)=false}.
+{pat_vertical(Pa,C,S,E)=false}.
+{pat_horizontal(Pa,C,S,E)=false}.
 
 % share same column and different row.
-pat_vertical(Pa) <- (patrol_ship1(R,C) & patrol_ship2(R1,C) & R!=R1).
+pat_vertical(Pa,C,R,R1) <- (patrol_ship1(R,C) & patrol_ship2(R1,C) & R!=R1).
 % share same row and different column.
-pat_horizontal(Pa) <- (patrol_ship1(R,C) & patrol_ship2(R,C1) & C!=C1).
+pat_horizontal(Pa,R,C,C1) <- (patrol_ship1(R,C) & patrol_ship2(R,C1) & C!=C1).
 
 
 % both positions must be placed for patrol boat
@@ -141,17 +137,17 @@ pat_placed(Pa) <- ((patrol_ship1(R,C) & patrol_ship2(R,C1)) | (patrol_ship1(R,C)
 ((submarine_ship3(R+2,C) & submarine_ship2(R+1,C)) | (submarine_ship3(R,C+2) & submarine_ship2(R,C+1))) <- submarine_ship1(R,C).
 
 % sub must be placed
-sub_placed(Su) <- ((submarine_ship1(R,C) & submarine_ship2(R,C1) & submarine_ship3(R,C2)) | (submarine_ship1(R,C) &submarine_ship2(R1,C) & submarine_ship3(R2,C))).
+sub_placed(Su) <- ((submarine_ship1(R,C) & submarine_ship2(R,C1) & submarine_ship3(R,C2)) | (submarine_ship1(R,C) & submarine_ship2(R1,C) & submarine_ship3(R2,C))).
 <- not sub_placed(Su).
 
 
 % next lines used to see if horizontal or vertical.
-{sub_vertical(Su)=false}.
-{sub_horizontal(Su)=false}.
+{sub_vertical(Su,C,S,E)=false}.
+{sub_horizontal(Su,R,S,E)=false}.
 % share same column and different row.
-sub_vertical(Su) <- (submarine_ship1(R,C) & submarine_ship2(R1,C) & submarine_ship3(R2,C) & R!=R1 & R1!=R2).
+sub_vertical(Su,C,R,R2) <- (submarine_ship1(R,C) & submarine_ship2(R1,C) & submarine_ship3(R2,C) & R!=R1 & R1!=R2).
 % share same row and different column.
-sub_horizontal(Su) <- (submarine_ship1(R,C) & submarine_ship2(R,C1) & submarine_ship3(R,C2) & C!=C1 & C1!=C2).
+sub_horizontal(Su,R,C,C2) <- (submarine_ship1(R,C) & submarine_ship2(R,C1) & submarine_ship3(R,C2) & C!=C1 & C1!=C2).
 
 % -----  END OF SUBMARINE -----
 
@@ -175,12 +171,12 @@ des_placed(Des) <- ((destroyer_ship1(R,C) & destroyer_ship2(R,C1) & destroyer_sh
 <- not des_placed(Des).
 
 % next lines used to see if horizontal or vertical.
-{des_vertical(Des)=false}.
-{des_horizontal(Des)=false}.
+{des_vertical(Des,C,S,E)=false}.
+{des_horizontal(Des,R,S,E)=false}.
 % share same column and different row.
-des_vertical(Des) <- (destroyer_ship1(R,C) & destroyer_ship2(R1,C) & destroyer_ship3(R2,C) & R!=R1 & R1!=R2).
+des_vertical(Des,C,R,R2) <- (destroyer_ship1(R,C) & destroyer_ship2(R1,C) & destroyer_ship3(R2,C) & R!=R1 & R1!=R2).
 % share same row and different column.
-des_horizontal(Des) <- (destroyer_ship1(R,C) & destroyer_ship2(R,C1) & destroyer_ship3(R,C2) & C!=C1 & C1!=C2).
+des_horizontal(Des,R,C,C2) <- (destroyer_ship1(R,C) & destroyer_ship2(R,C1) & destroyer_ship3(R,C2) & C!=C1 & C1!=C2).
 
 % ----- END OF DESTROYER
 
@@ -198,7 +194,7 @@ des_horizontal(Des) <- (destroyer_ship1(R,C) & destroyer_ship2(R,C1) & destroyer
 <- aircraft_ship3(R4, C4) & aircraft_ship3(R5, C5) & (R4 != R5 | C4 != C5).
 <- aircraft_ship4(R6, C6) & aircraft_ship4(R7, C7) & (R6 != R7 | C6 != C7).
 
-%aircraft poisitions must be adjacent vertical or horizontal
+%aircraft positions must be adjacent vertical or horizontal
 ((aircraft_ship4(R+3,C) & aircraft_ship3(R+2, C) & aircraft_ship2(R+1,C)) | (aircraft_ship4(R, C+3) & aircraft_ship3(R, C+2) & aircraft_ship2(R, C+1))) <- aircraft_ship1(R,C).
 
 %aircraft must be placed
@@ -206,19 +202,15 @@ air_placed(Air) <- ((aircraft_ship1(R,C) & aircraft_ship2(R,C1) & aircraft_ship3
 <- not air_placed(Air).
 
 % next lines used to see if horizontal or vertical.
-{air_vertical(Air)=false}.
-{air_horizontal(Air)=false}.
+{air_vertical(Air,C,S,E)=false}.
+{air_horizontal(Air,R,S,E)=false}.
 % share same column and different row.
-air_vertical(Air) <- (aircraft_ship1(R,C) & aircraft_ship2(R1,C) & aircraft_ship3(R2,C) & aircraft_ship4(R3,C) & R!=R1 & R1!=R2 & R2!=R3).
+air_vertical(Air,C,R,R3) <- (aircraft_ship1(R,C) & aircraft_ship2(R1,C) & aircraft_ship3(R2,C) & aircraft_ship4(R3,C) & R!=R1 & R1!=R2 & R2!=R3).
 % share same row and different column.
-air_horizontal(Air) <- (aircraft_ship1(R,C) & aircraft_ship2(R,C1) & aircraft_ship3(R,C2) & aircraft_ship4(R,C3) & C!=C1 & C1!=C2 & C2!=C3).
-
+air_horizontal(Air,R,C,C3) <- (aircraft_ship1(R,C) & aircraft_ship2(R,C1) & aircraft_ship3(R,C2) & aircraft_ship4(R,C3) & C!=C1 & C1!=C2 & C2!=C3).
 
 
 % ----- END OF AIRCRAFT -----
-
-
-% TESTING FIRST 4
 
 
 % ----- START OF BATTLESHIP ----
@@ -229,8 +221,7 @@ air_horizontal(Air) <- (aircraft_ship1(R,C) & aircraft_ship2(R,C1) & aircraft_sh
 {battle_ship4(R,C)=B}.
 {battle_ship5(R,C)=B}.
 
-
-%battleship must take 4 positions on board
+%battleship must take 5 positions on board
 <- battle_ship1(R,C) & battle_ship1(R1,C1) & (R != R1 | C != C1).
 <- battle_ship2(R2, C2) & battle_ship2(R3, C3) & (R2 != R3 | C2 != C3).
 <- battle_ship3(R4, C4) & battle_ship3(R5, C5) & (R4 != R5 | C4 != C5).
@@ -245,15 +236,68 @@ bship_placed(Bship) <- ((battle_ship1(R,C) & battle_ship2(R,C1) & battle_ship3(R
 <- not bship_placed(Bship).
 
 % next lines used to see if horizontal or vertical.
-{bship_vertical(Bship)=false}.
-{bship_horizontal(Bship)=false}.
+{bship_vertical(Bship,C,S,E)=false}.
+{bship_horizontal(Bship,R,S,E)=false}.
 % share same column and different row.
-bship_vertical(Bship) <- (battle_ship1(R,C) & battle_ship2(R1,C) & battle_ship3(R2,C) & battle_ship4(R3,C) & battle_ship5(R4,C) & R!=R1 & R1!=R2 & R2!=R3 & R3!=R4).
+bship_vertical(Bship,C,R,R4) <- (battle_ship1(R,C) & battle_ship2(R1,C) & battle_ship3(R2,C) & battle_ship4(R3,C) & battle_ship5(R4,C) & R!=R1 & R1!=R2 & R2!=R3 & R3!=R4).
 % share same row and different column.
-bship_horizontal(Bship) <- (battle_ship1(R,C) & battle_ship2(R,C+1) & battle_ship3(R,C+2) & battle_ship4(R,C+3) & battle_ship5(R,C+4) & C!=C1 & C1!=C2 & C2!=C3 & C3!=C4).
+bship_horizontal(Bship,R,C,C4) <- (battle_ship1(R,C) & battle_ship2(R,C+1) & battle_ship3(R,C+2) & battle_ship4(R,C+3) & battle_ship5(R,C+4) & C!=C1 & C1!=C2 & C2!=C3 & C3!=C4).
 
 % ---- END OF BATTLESHIP -----
 % ---- END OF BASE PROGRAM -----
+
+% ----- NO SHIPS CAN TOUCH EACH OTHER -----
+
+<- not (battle_ship1(2,3)).
+<- not (submarine_ship1(5,4)).
+<- not (destroyer_ship1(2,5)).
+<- not (aircraft_ship1(1,6)).
+
+
+
+% ----- TESTING FIRST PATROL SHIP CANNOT TOUCH ANY OTHER SHIP
+<- bship_vertical(Bship,C,S,E) & ((pat_vertical(Pa,C1,S1,E1) & #abs(C-C1)==1) | (pat_horizontal(Pa,R,S2,E2) & (#abs(C-S2)<=1 | #abs(C-E2)<=1))).
+<- bship_horizontal(Bship,R,S,E) & ((pat_horizontal(Pa,R1,S1,E1) & #abs(R-R1)==1) | (pat_vertical(Pa,C,S2,E2) & (#abs(R-S2)<=1 | #abs(R-E2)<=1))).
+
+<- sub_horizontal(Su,R,S,E) & pat_horizontal(Pa,R1,S1,E1) & (#abs(R-R1)<=1 & (#abs(S-S1)<=1 | #abs(E-S1)<=1 | #abs(S-E1)<=1 | #abs(E-E1)<=1)).
+
+
+% Patrol ship cannot touch battleship
+%<- (battle_ship1(R,C) | battle_ship2(R,C1) | battle_ship3(R,C2) | battle_ship4(R,C3) | battle_ship5(R,C4)) & ((patrol_ship1(R5,C) | patrol_ship2(R6,C)) & (#abs(R5-R)==1 | #abs(R6-R)==1)).
+%<- (battle_ship1(R,C) | battle_ship2(R1,C) | battle_ship3(R2,C) | battle_ship4(R3,C) | battle_ship5(R4,C)) & ((patrol_ship1(R,C5) | patrol_ship2(R,C6)) & (#abs(C5-C)==1 | #abs(C6-C)==1)).
+
+
+%<-  | (patrol_ship1(R,C1) | patrol_ship2(R,C1))) & ((#abs(R-R1)==1) | (#abs(C-C1)==1)).
+%<- (battle_ship1(R,C) | battle_ship5(R,C)) & (patrol_ship1(R1,C1) | patrol_ship2(R1,C1)) & (#abs(R1-R)==1 & #abs(C1-C)==1).
+
+% Patrol ship cannot touch aircraft
+%<- (aircraft_ship1(R,C) | aircraft_ship2(R,C) | aircraft_ship3(R,C) | aircraft_ship4(R,C)) & ((patrol_ship1(R1,C) | patrol_ship2(R1,C)) | (patrol_ship1(R,C1) | patrol_ship2(R,C1))) & ((#abs(R-R1)==1) | (#abs(C-C1)==1)).
+%<- (aircraft_ship1(R,C) | aircraft_ship4(R,C)) & (patrol_ship1(R1,C1) | patrol_ship2(R1,C1)) & (#abs(R1-R)==1 & #abs(C1-C)==1).
+
+% Patrol ship cannot touch submarine
+%<- (submarine_ship1(R,C) | submarine_ship2(R,C) | submarine_ship3(R,C)) & ((patrol_ship1(R1,C) | patrol_ship2(R1,C)) | (patrol_ship1(R,C1) | patrol_ship2(R,C1))) & ((#abs(R-R1)==1) | (#abs(C-C1)==1)).
+%<- (submarine_ship1(R,C) | submarine_ship3(R,C)) & (patrol_ship1(R1,C1) | patrol_ship2(R1,C1)) & (#abs(R1-R)==1 & #abs(C1-C)==1).
+
+% Patrol ship cannot touch destroyer
+%<- (destroyer_ship1(R,C) | destroyer_ship2(R,C) | destroyer_ship3(R,C)) & ((patrol_ship1(R1,C) | patrol_ship2(R1,C)) | (patrol_ship1(R,C1) | patrol_ship2(R,C1))) & ((#abs(R-R1)==1) | (#abs(C-C1)==1)).
+%<- (destroyer_ship1(R,C) | destroyer_ship3(R,C)) & (patrol_ship1(R1,C1) | patrol_ship2(R1,C1)) & (#abs(R1-R)==1 & #abs(C1-C)==1).
+
+% ----- END OF PATROL SHIP CANNOT TOUCH ANY OTHER SHIP
+
+% ----- START OF DESTROYER CANNOT TOUCH ANY OTHER SHIP
+
+
+% destroyer cannot touch battleship
+%<- (battle_ship1(R,C) | battle_ship2(R,C) | battle_ship3(R,C) | battle_ship4(R,C) | battle_ship5(R,C)) & ((destroyer_ship1(R1,C) | destroyer_ship2(R1,C) | destroyer_ship3(R1,C)) | (destroyer_ship1(R,C1) | destroyer_ship2(R,C1) | destroyer_ship3(R,C1))) & ((#abs(R-R1)==1) | (#abs(C-C1)==1)).
+%<- (battle_ship1(R,C) | battle_ship5(R,C)) & (destroyer_ship1(R1,C1) | destroyer_ship3(R1,C1)) & (#abs(R1-R)==1 & #abs(C1-C)==1).
+
+% destroyer cannot touch aircraft
+%<- (aircraft_ship1(R,C) | aircraft_ship2(R,C) | aircraft_ship3(R,C) | aircraft_ship4(R,C)) & ((destroyer_ship1(R1,C) | destroyer_ship2(R1,C) | destroyer_ship3(R1,C)) | (destroyer_ship1(R,C1) | destroyer_ship2(R,C1) | destroyer_ship3(R,C1))) & ((#abs(R-R1)==1) | (#abs(C-C1)==1)).
+%<- (aircraft_ship1(R,C) | aircraft_ship4(R,C)) & (destroyer_ship1(R1,C1) | destroyer_ship3(R1,C1)) & (#abs(R1-R)==1 & #abs(C1-C)==1).
+
+% destroyer cannot touch submarine
+%<- (submarine_ship1(R,C) | submarine_ship2(R,C) | submarine_ship3(R,C)) & ((destroyer_ship1(R1,C) | destroyer_ship2(R1,C) | destroyer_ship3(R1,C)) | (destroyer_ship1(R,C1) | destroyer_ship2(R,C1) | destroyer_ship3(R,C1))) & ((#abs(R-R1)==1) | (#abs(C-C1)==1)).
+%<- (submarine_ship1(R,C) | submarine_ship3(R,C)) & (destroyer_ship1(R1,C1) | destroyer_ship3(R1,C1)) & (#abs(R1-R)==1 & #abs(C1-C)==1).
 
 
 % ADDITIONAL CONSTRAINTS
@@ -268,7 +312,7 @@ bship_horizontal(Bship) <- (battle_ship1(R,C) & battle_ship2(R,C+1) & battle_shi
 %SHIPS CANT BE ON EDGES
 %<- area_occupied(1,C).
 %<- area_occupied(R,1).
-%<- area_occupied(R,6).
+%<- area_occupied(6,C).
 %Solutions: 1456
 
 %Patrol boat has be at 2,2 and ships cant be on edges
@@ -280,7 +324,7 @@ bship_horizontal(Bship) <- (battle_ship1(R,C) & battle_ship2(R,C+1) & battle_shi
 %even rows
 %<- area_occupied(R,C) & (R #mod 2 != 0).
 %odd rows
-<- area_occupied(R,C) & (R #mod 2 == 0).
+%<- area_occupied(R,C) & (R #mod 2 == 0).
 %even columns
 %<- area_occupied(R,C) & (C #mod 2 != 0).
 %odd columns
@@ -292,14 +336,14 @@ bship_horizontal(Bship) <- (battle_ship1(R,C) & battle_ship2(R,C+1) & battle_shi
 %<- not patrol_ship1(1,1).
 %<- not  (submarine_ship1(6,1) | submarine_ship3(6,1)).
 %<- not  (destroyer_ship1(1,6) | destroyer_ship3(1,6)).
-%<- not  ( aircraft_ship4(6,6)).
+%<- not  (aircraft_ship4(6,6)).
 %Solutions: 64
 
 
 % CASE OF EITHER NOT ALL SHIPS HORIZONTAL OR NOT ALL SHIPS VERTICAL
 
-%<- pat_vertical(Pa) & sub_vertical(Su) & des_vertical(Des) & air_vertical(Air) & bship_vertical(Bship).
-%<- pat_horizontal(Pa) & sub_horizontal(Su) & des_horizontal(Des) & air_horizontal(Air) & bship_horizontal(Bship).
+<- pat_vertical(Pa) & sub_vertical(Su) & des_vertical(Des) & air_vertical(Air) & bship_vertical(Bship).
+<- pat_horizontal(Pa) & sub_horizontal(Su) & des_horizontal(Des) & air_horizontal(Air) & bship_horizontal(Bship).
 
 
 %Patrol ship, aircraft have to be in same triangle, and all the others have to be in opposite triangle
@@ -307,27 +351,10 @@ bship_horizontal(Bship) <- (battle_ship1(R,C) & battle_ship2(R,C+1) & battle_shi
 %<- area_occupied(1,1) | area_occupied(2,2) | area_occupied(3,3) | area_occupied(4,4) | area_occupied(5,5) | area_occupied(6,6).
 %<- patrol_ship1(R,C) & aircraft_ship1(R1,C1) & (R/C < 1 & R1/C1 > 1).
 %<- submarine_ship1(R,C) & destroyer_ship1(R1,C1) & battle_ship1(R2,C2) & not ((R/C < 1 & R1/C1 < 1 & R2/C2 < 1 ) | (R/C > 1 & R1/C1 > 1 & R2/C2 > 1)).
-% 3328 Solutions
+% 3328 Solutions (3084 if not all vertical or horizontal)
 
 %Patrol ship, destroyer, submarine, and battleship have to be in same triangle, aircraft has to be in different.
 
 %<- area_occupied(1,1) | area_occupied(2,2) | area_occupied(3,3) | area_occupied(4,4) | area_occupied(5,5) | area_occupied(6,6).
 %<- submarine_ship1(R,C) & destroyer_ship1(R1,C1) & battle_ship1(R2,C2) & patrol_ship1(R3,C3) & not ((R/C < 1 & R1/C1 < 1 & R2/C2 < 1 & R3/C3 < 1) | (R/C > 1 & R1/C1 > 1 & R2/C2 > 1 & R3/C3 > 1)).
-% 444 Solutions pat_horizontal(Pa,R1,S1,E1) & #abs(R-R1)==1 & (#abs(S-S1)<=1 | #abs(E-E1)<=1)) | 
-
-
-<- sub_horizontal(Su,R,S,E) & pat_horizontal(Pa,R1,S1,E1) & (#abs(R-R1)<=1 & (#abs(S-S1)<=1 | #abs(E-S1)<=1 | #abs(S-E1)<=1 | #abs(E-E1)<=1)).
-
-
-
-
-
-
-
-% Patrol ship cannot touch battleship
-%<- (battle_ship1(R,C) | battle_ship2(R,C1) | battle_ship3(R,C2) | battle_ship4(R,C3) | battle_ship5(R,C4)) & ((patrol_ship1(R5,C) | patrol_ship2(R6,C)) & (#abs(R5-R)==1 | #abs(R6-R)==1)).
-%<- (battle_ship1(R,C) | battle_ship2(R1,C) | battle_ship3(R2,C) | battle_ship4(R3,C) | battle_ship5(R4,C)) & ((patrol_ship1(R,C5) | patrol_ship2(R,C6)) & (#abs(C5-C)==1 | #abs(C6-C)==1)).
-
-
-
-%
+% 444 Solutions
